@@ -1,21 +1,27 @@
 extends Label
 
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	text = str(round((get_parent() as Node3D).global_position))
+func _process(delta: float):
+	var parent = get_parent()
+	if parent:
+		text = str(round((parent as Node3D).global_position))
+	else:
+		text = "No parent"
+	
 	text += "\n"
-	text += str(round((%Vessel as Vessel).global_position))
+	
+	var vessel = get_node_or_null("%Vessel")
+	if vessel:
+		text += str(round((vessel as Vessel).global_position))
+	else:
+		text += "No vessel found"
+	
 	text += "\n"
-	text += str(round( 1.0 / _delta ))
+	text += str(round(1.0 / delta))
 	text += "\n"
 	text += str(Vector2(
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-		).limit_length(1.0))
-	
+	).limit_length(1.0))
